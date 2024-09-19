@@ -10,9 +10,6 @@ import SearchBox from './SearchBox';
 import { resetCart } from '../slices/cartSlice';
 
 const Header = () => {
-  const [categories, setCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
@@ -22,23 +19,7 @@ const Header = () => {
 
   const [logoutApiCall] = useLogoutMutation();
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch('/api/products'); // Update with your API endpoint
-        const data = await response.json();
-        const uniqueCategories = Array.from(new Set(data.products.map(p => p.category)));
-        setCategories(uniqueCategories);
-        setIsLoading(false);
-      } catch (err) {
-        setError(err);
-        setIsLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
+  
   const logoutHandler = async () => {
     try {
       await logoutApiCall().unwrap();
@@ -61,19 +42,7 @@ const Header = () => {
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
               <SearchBox />
-              {isLoading ? (
-                <Nav.Link>Loading...</Nav.Link>
-              ) : error ? (
-                <Nav.Link>Error loading categories</Nav.Link>
-              ) : (
-                <NavDropdown title='Categories' id='categories-dropdown'>
-                  {categories.map((category, index) => (
-                    <LinkContainer key={index} to={`/category/${category}`}>
-                      <NavDropdown.Item>{category}</NavDropdown.Item>
-                    </LinkContainer>
-                  ))}
-                </NavDropdown>
-              )}
+             
               <LinkContainer to='/cart'>
                 <Nav.Link>
                   <FaShoppingCart /> Cart
