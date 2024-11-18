@@ -17,14 +17,18 @@ const PaymentScreen = () => {
     }
   }, [navigate, shippingAddress]);
 
-  const [paymentMethod, setPaymentMethod] = useState('PayPal');
+  const [paymentMethod, setPaymentMethod] = useState('');
 
   const dispatch = useDispatch();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(savePaymentMethod(paymentMethod));
-    navigate('/placeorder');
+    if (paymentMethod) {
+      dispatch(savePaymentMethod(paymentMethod));
+      navigate('/placeorder');
+    } else {
+      alert('Please select a payment method');
+    }
   };
 
   return (
@@ -38,11 +42,21 @@ const PaymentScreen = () => {
             <Form.Check
               className='my-2'
               type='radio'
-              label='PayPal or Credit Card'
-              id='PayPal'
+              label='Cash on delivery (COD)'
+              id='COD'
               name='paymentMethod'
-              value='PayPal'
-              checked
+              value='COD'
+              checked={paymentMethod === 'COD'}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+            ></Form.Check>
+            <Form.Check
+              className='my-2'
+              type='radio'
+              label='Account Transfer'
+              id='Account Transfer'
+              name='paymentMethod'
+              value='Account Transfer'
+              checked={paymentMethod === 'Account Transfer'}
               onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
           </Col>
