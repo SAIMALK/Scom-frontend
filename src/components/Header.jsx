@@ -25,7 +25,7 @@ const Header = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('/api/category'); // Updated endpoint
+        const response = await fetch('https://scom-backend.vercel.app/api/category'); // Updated endpoint
         const data = await response.json();
         console.log('API Response:', data); // Add this for debugging
         setCategories(data.categories); // Ensure data is an array
